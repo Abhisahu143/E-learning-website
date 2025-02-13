@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-learning Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/three-config.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            text: '#f1f5f9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #3B82F6, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .theme-transition {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .theme-toggle-icon {
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle-icon:hover {
+            transform: rotate(180deg);
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(45deg, #3B82F6, #10B981);
+            --secondary-gradient: linear-gradient(45deg, #10B981, #3B82F6);
+        }
+
+        .dark {
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-accent: #60A5FA;
+            --bg-card: #1E293B;
+            --bg-hover: #2D3748;
+        }
+
+        .dark .gradient-text {
+            background: linear-gradient(45deg, #60A5FA, #34D399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="font-[Poppins] overflow-x-hidden theme-transition dark:bg-dark-bg">
+    <canvas id="bgCanvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50">
+        <!-- Three.js Canvas Background -->
+        <div class="absolute inset-0 -z-10">
+            <canvas id="navCanvas" class="w-full h-full"></canvas>
+        </div>
+
+        <!-- Navbar Content -->
+        <div class="backdrop-blur-md bg-white/70 dark:bg-dark-card/70 border-b border-white/10 dark:border-gray-700/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0">
+                        <span class="text-4xl font-extrabold">
+                            <span
+                                class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">E</span>
+                            <span
+                                class="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Coding</span>
+                        </span>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center justify-end flex-1 space-x-8">
+                        <div class="flex space-x-8 items-center">
+                            <a href="#home"
+                                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group">
+                                Home
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                            </a>
+                            <a href="#courses"
+                                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group">
+                                Courses
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                            </a>
+                            <a href="#features"
+                                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group">
+                                Features
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                            </a>
+                            <a href="#pricing"
+                                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 relative group">
+                                Pricing
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                            </a>
+                        </div>
+
+                        <!-- Auth Buttons -->
+                        <div class="flex items-center space-x-4">
+                            <button
+                                class="px-6 py-2.5 text-primary dark:text-primary border-2 border-primary dark:border-primary rounded-full hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300">
+                                Sign In
+                            </button>
+                            <button
+                                class="px-6 py-2.5 bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" onclick="toggleMenu()"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100 focus:outline-none">
+                            <svg id="menu-icon" class="block h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Theme toggle button -->
+                    <div class="theme-toggle-wrapper">
+                        <button onclick="toggleTheme(event)" 
+                            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-card/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            <svg id="theme-toggle-icon" 
+                                class="w-6 h-6 theme-toggle-icon text-gray-700 dark:text-gray-300"
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24">
+                                <!-- Icon will be updated by JS -->
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <div class="fixed inset-0 bg-black/20 dark:bg-black/40" onclick="toggleMenu()"></div>
+                <div class="fixed inset-x-0 top-[80px] p-4 mobile-menu-backdrop border-b border-gray-200 dark:border-gray-700/50">
+                    <div class="space-y-3">
+                        <a href="#home"
+                            class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-colors duration-300">
+                            Home
+                        </a>
+                        <a href="#courses"
+                            class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-colors duration-300">
+                            Courses
+                        </a>
+                        <a href="#features"
+                            class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-colors duration-300">
+                            Features
+                        </a>
+                        <a href="#pricing"
+                            class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-colors duration-300">
+                            Pricing
+                        </a>
+                        
+                        <div class="pt-4 space-y-3">
+                            <button onclick="toggleMenu()"
+                                class="w-full px-4 py-2 text-primary dark:text-primary border-2 border-primary dark:border-primary rounded-lg hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300">
+                                Sign In
+                            </button>
+                            <button onclick="toggleMenu()"
+                                class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-300">
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 lg:pt-40 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <h1 class="text-4xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900 dark:text-white">
+                        Learn to <span class="text-primary dark:text-blue-400">Code</span> Like a
+                        <span class="text-secondary dark:text-green-400">Pro</span>
+                    </h1>
+                    <p class="text-gray-600 dark:text-gray-300 text-lg mb-8 max-w-2xl">
+                        Master programming with our comprehensive courses. Join thousands of students worldwide and
+                        start your coding journey today.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button
+                            class="px-8 py-4 bg-primary text-white rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:-translate-y-1">
+                            Start Learning
+                        </button>
+                        <button
+                            class="px-8 py-4 border-2 border-primary text-primary rounded-full hover:bg-primary/10 transition-all duration-300 transform hover:-translate-y-1">
+                            View Courses
+                        </button>
+                    </div>
+                    <div class="mt-12 flex items-center justify-center lg:justify-start gap-8">
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-primary dark:text-blue-400">50K+</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Students</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-primary dark:text-blue-400">100+</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Courses</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-primary dark:text-blue-400">4.8/5</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Rating</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <img src="assets/images/boy.png" alt="Learning" class="w-full max-w-2xl mx-auto animate-float">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Why Choose Us?</h2>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Experience the best learning platform with
+                    cutting-edge features designed for your success.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Interactive Learning -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Interactive Learning</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Learn by doing with hands-on projects and real-time
+                        feedback from expert instructors.</p>
+                </div>
+
+                <!-- Expert Instructors -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Expert Instructors</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Learn from industry professionals with years of
+                        real-world experience.</p>
+                </div>
+
+                <!-- Flexible Learning -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Flexible Learning</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Study at your own pace with 24/7 access to course
+                        materials and resources.</p>
+                </div>
+
+                <!-- Project-Based Learning -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Project-Based Learning</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Build real-world projects to strengthen your portfolio
+                        and practical skills.</p>
+                </div>
+
+                <!-- Career Support -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Career Support</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Get career guidance, resume reviews, and job placement
+                        assistance.</p>
+                </div>
+
+                <!-- Community Support -->
+                <div
+                    class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Community Support</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Join our active community of learners for networking and
+                        collaboration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses Section -->
+    <section id="courses" class="py-20 bg-gray-50 dark:bg-gray-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Popular Courses</h2>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                    Choose from our wide range of courses and start your journey today.
+                </p>
+            </div>
+            
+            <!-- Course Filter (Optional) -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="px-6 py-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors">
+                    All Courses
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    Web Development
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    Programming
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    Design
+                </button>
+            </div>
+
+            <!-- Course Grid -->
+            <div id="courseContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Courses will be dynamically added here -->
+            </div>
+
+            <!-- View All Button -->
+            <div class="text-center mt-12">
+                <button class="px-8 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors transform hover:-translate-y-1 duration-300">
+                    View All Courses
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-gray-950 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-white dark:text-gray-100">E-Coding</h3>
+                    <p class="text-gray-400 dark:text-gray-300 mb-6">Empowering the next generation of developers
+                        through quality education.</p>
+                    <div class="flex space-x-4">
+                        <!-- Facebook -->
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors group">
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-white transition-colors"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                            </svg>
+                        </a>
+
+                        <!-- Twitter/X -->
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors group">
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-white transition-colors"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors group">
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-white transition-colors"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+
+                        <!-- LinkedIn -->
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors group">
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-white transition-colors"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z" />
+                            </svg>
+                        </a>
+
+                        <!-- GitHub -->
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors group">
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-white transition-colors"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 text-white">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#about"
+                                class="text-gray-400 hover:text-white transition-colors flex items-center group">
+                                <span class="transform group-hover:translate-x-2 transition-transform">About Us</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#courses"
+                                class="text-gray-400 hover:text-white transition-colors flex items-center group">
+                                <span class="transform group-hover:translate-x-2 transition-transform">Courses</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#teachers"
+                                class="text-gray-400 hover:text-white transition-colors flex items-center group">
+                                <span class="transform group-hover:translate-x-2 transition-transform">Teachers</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#contact"
+                                class="text-gray-400 hover:text-white transition-colors flex items-center group">
+                                <span class="transform group-hover:translate-x-2 transition-transform">Contact</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Support</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                        </li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates and offers.</p>
+                    <form class="space-y-4">
+                        <input type="email" placeholder="Your email"
+                            class="w-full px-4 py-3 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        <button
+                            class="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 E-Coding {Code with Abhi}. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/three-config.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <div class="theme-switch-pulse"></div>
+</body>
+
+</html>

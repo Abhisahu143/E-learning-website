@@ -1,0 +1,189 @@
+/* Base styles */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Theme transitions */
+.theme-transition {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Gradient text effects */
+.gradient-text {
+    background: linear-gradient(45deg, #3B82F6, #10B981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Dark mode styles */
+.dark {
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-accent: #60A5FA;
+    --bg-card: #1E293B;
+    --bg-hover: #2D3748;
+}
+
+/* Animations */
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+}
+
+/* Theme toggle animations */
+.theme-toggle-icon {
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(96, 165, 250, 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    transform: scale(0);
+}
+
+.theme-toggle-wrapper:hover::before {
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.rotate-icon {
+    animation: morphAnimation 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes morphAnimation {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(0.8) rotate(180deg);
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/* Dark mode icon effects */
+.dark .theme-toggle-icon {
+    filter: drop-shadow(0 0 2px rgba(96, 165, 250, 0.3));
+}
+
+.dark .theme-toggle-wrapper:hover .theme-toggle-icon {
+    color: #60A5FA;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.5));
+    transform: scale(1.1);
+}
+
+/* Light mode icon effects */
+.theme-toggle-icon {
+    filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.3));
+}
+
+.theme-toggle-wrapper:hover .theme-toggle-icon {
+    color: #2563EB;
+    filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.5));
+    transform: scale(1.1);
+}
+
+/* Theme transition pulse effect */
+.theme-switch-pulse {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at var(--x) var(--y), 
+        rgba(96, 165, 250, 0.2), 
+        transparent 50%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.theme-switch-pulse.active {
+    animation: pulseAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulseAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
+}
+
+/* Theme transition effects */
+.theme-transition * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+}
+
+/* Mobile menu animations */
+.animate-slideDown {
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile menu backdrop */
+.mobile-menu-backdrop {
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.8) 100%
+    );
+    backdrop-filter: blur(8px);
+}
+
+.dark .mobile-menu-backdrop {
+    background: linear-gradient(to bottom, 
+        rgba(15, 23, 42, 0.9) 0%,
+        rgba(15, 23, 42, 0.8) 100%
+    );
+}
+
+/* ... rest of your styles ... */ 
